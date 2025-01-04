@@ -114,8 +114,16 @@
   box-sizing: border-box;
 }
 
-a {
+/* a {
   text-decoration: none;
+} */
+
+a {
+  color: var(--orange-yellow-crayola); /* Use the accent color */
+  text-decoration: none; /* Optional: Remove underline */
+}
+a:hover {
+  color: var(--white-2); /* Change color on hover, if desired */
 }
 
 li {
