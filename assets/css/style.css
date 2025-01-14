@@ -11,6 +11,45 @@
    * colors
    */
 
+  /* base accent color */
+  /* --accent-color: hsl(45, 100%, 72%);
+  --accent-dark: hsl(45, 54%, 58%); */
+
+  --accent-color: hsl(200, 100%, 55%);
+  --accent-dark: hsl(200, 99%, 32%);
+  --accent-light: hsl(200, 100%, 70%);
+
+  /* Keep your existing color variables as fallbacks */
+  --orange-yellow-crayola: var(--accent-color);
+  --vegas-gold: var(--accent-dark);
+
+  /* Keep existing gradients for now */
+  --bg-gradient-yellow-1: var(--accent-gradient-1);
+
+  --accent-gradient-1: linear-gradient(
+    to bottom right,
+    var(--accent-color) 0%,
+    hsla(36, 100%, 69%, 0) 50%
+  );
+
+  --accent-gradient-2: linear-gradient(
+    135deg,
+    color-mix(in hsl, var(--accent-color) 25%, transparent) 0%,
+    transparent 59.86%
+  );
+
+  --accent-text-gradient: linear-gradient(
+    to right,
+    var(--accent-color),
+    /* hsl(35, 100%, 68%) */
+    var(--accent-light)
+  );
+
+  /* opacity variations */
+  --accent-25: color-mix(in hsl, var(--accent-color), transparent 75%);
+  --accent-50: color-mix(in hsl, var(--accent-color), transparent 50%);
+  --accent-75: color-mix(in hsl, var(--accent-color), transparent 25%);
+
   /* gradient */
 
   --bg-gradient-onyx: linear-gradient(
@@ -24,27 +63,13 @@
       hsla(240, 2%, 11%, 0) 100%
     ),
     hsl(240, 2%, 13%);
-  --bg-gradient-yellow-1: linear-gradient(
-    to bottom right,
-    hsl(45, 100%, 71%) 0%,
-    hsla(36, 100%, 69%, 0) 50%
-  );
-  --bg-gradient-yellow-2: linear-gradient(
-      135deg,
-      hsla(45, 100%, 71%, 0.251) 0%,
-      hsla(35, 100%, 68%, 0) 59.86%
-    ),
-    hsl(240, 2%, 13%);
+  --bg-gradient-yellow-2: var(--accent-gradient-2);
   --border-gradient-onyx: linear-gradient(
     to bottom right,
     hsl(0, 0%, 25%) 0%,
     hsla(0, 0%, 25%, 0) 50%
   );
-  --text-gradient-yellow: linear-gradient(
-    to right,
-    hsl(45, 100%, 72%),
-    hsl(35, 100%, 68%)
-  );
+  --text-gradient-yellow: var(--accent-text-gradient);
 
   /* solid */
 
@@ -119,11 +144,12 @@
 } */
 
 a {
-  color: var(--orange-yellow-crayola); /* Use the accent color */
-  text-decoration: none; /* Optional: Remove underline */
+  color: var(--accent-color);
+  text-decoration: none;
 }
+
 a:hover {
-  color: var(--white-2); /* Change color on hover, if desired */
+  color: var(--white-2);
 }
 
 li {
@@ -156,12 +182,12 @@ textarea {
 }
 
 ::selection {
-  background: var(--orange-yellow-crayola);
+  background: var(--accent-color);
   color: var(--smoky-black);
 }
 
 :focus {
-  outline-color: var(--orange-yellow-crayola);
+  outline-color: var(--accent-color);
 }
 
 html {
@@ -203,7 +229,7 @@ article {
   justify-content: center;
   align-items: center;
   font-size: 16px;
-  color: var(--orange-yellow-crayola);
+  color: var(--accent-color);
   box-shadow: var(--shadow-1);
   z-index: 1;
 }
@@ -276,7 +302,7 @@ article.active {
   left: 0;
   width: 30px;
   height: 3px;
-  background: var(--text-gradient-yellow);
+  background: var(--accent-text-gradient);
   border-radius: 3px;
 }
 
@@ -291,7 +317,7 @@ article.active {
 }
 
 .has-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--orange-yellow-crayola);
+  background: var(--accent-color);
   border-radius: 5px;
 }
 
@@ -381,7 +407,7 @@ main {
   right: -15px;
   border-radius: 0 15px;
   font-size: 13px;
-  color: var(--orange-yellow-crayola);
+  color: var(--accent-color);
   background: var(--border-gradient-onyx);
   padding: 10px;
   box-shadow: var(--shadow-2);
@@ -401,12 +427,12 @@ main {
 
 .info_more-btn:hover,
 .info_more-btn:focus {
-  background: var(--bg-gradient-yellow-1);
+  background: var(--accent-gradient-1);
 }
 
 .info_more-btn:hover::before,
 .info_more-btn:focus::before {
-  background: var(--bg-gradient-yellow-2);
+  background: var(--accent-gradient-2);
 }
 
 .info_more-btn span {
@@ -514,7 +540,7 @@ main {
 }
 
 .navbar-link.active {
-  color: var(--orange-yellow-crayola);
+  color: var(--accent-color);
 }
 
 /*-----------------------------------*\
@@ -856,7 +882,8 @@ main {
 }
 
 .timeline-list span {
-  color: var(--vegas-gold);
+  /* color: var(--vegas-gold); */
+  color: var(--accent-dark);
   font-weight: var(--fw-400);
   line-height: 1.6;
 }
@@ -878,7 +905,7 @@ main {
   left: -33px;
   height: 6px;
   width: 6px;
-  background: var(--text-gradient-yellow);
+  background: var(--accent-text-gradient);
   border-radius: 50%;
   box-shadow: 0 0 0 4px var(--jet);
 }
@@ -926,7 +953,7 @@ main {
 }
 
 .skill-progress-fill {
-  background: var(--text-gradient-yellow);
+  background: var(--accent-text-gradient);
   height: 100%;
   border-radius: inherit;
 }
@@ -1056,7 +1083,7 @@ main {
   --scale: 0.8;
 
   background: var(--jet);
-  color: var(--orange-yellow-crayola);
+  color: var(--accent-color);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1190,7 +1217,7 @@ main {
 }
 
 .blog-post-item > a:hover .blog-item-title {
-  color: var(--orange-yellow-crayola);
+  color: var(--accent-color);
 }
 
 .blog-text {
@@ -1214,8 +1241,15 @@ main {
   overflow: hidden;
 }
 
+/* .mapbox figure {
+  height: 100%;
+} */
+
 .mapbox figure {
   height: 100%;
+  border: 1px solid var(--accent-color);
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 .mapbox iframe {
@@ -1255,7 +1289,7 @@ main {
 }
 
 .form-input:focus {
-  border-color: var(--orange-yellow-crayola);
+  border-color: var(--accent-color);
 }
 
 textarea.form-input {
@@ -1278,7 +1312,7 @@ textarea.form-input::-webkit-resizer {
   position: relative;
   width: 100%;
   background: var(--border-gradient-onyx);
-  color: var(--orange-yellow-crayola);
+  color: var(--accent-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1307,11 +1341,11 @@ textarea.form-input::-webkit-resizer {
 }
 
 .form-btn:hover {
-  background: var(--bg-gradient-yellow-1);
+  background: var(--accent-gradient-1);
 }
 
 .form-btn:hover::before {
-  background: var(--bg-gradient-yellow-2);
+  background: var(--accent-gradient-2);
 }
 
 .form-btn:disabled {
@@ -1761,7 +1795,7 @@ textarea.form-input::-webkit-resizer {
   }
 
   .filter-item button.active {
-    color: var(--orange-yellow-crayola);
+    color: var(--accent-color);
   }
 
   /* portfolio and blog grid */
