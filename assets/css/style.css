@@ -2132,3 +2132,11 @@ textarea.form-input::-webkit-resizer {
               0 0 10px var(--accent-color),
               0 0 20px var(--accent-25);
 }
+
+.contact-info :is(.contact-description) {
+  color: var(--white-2);
+  font-size: var(--fs-7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
