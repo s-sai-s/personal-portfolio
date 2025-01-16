@@ -1530,10 +1530,16 @@ textarea.form-input::-webkit-resizer {
     transition: all 0.3s ease; /* Added for smooth transition */
   }
   
-  .info-content .title:hover {
+  /* .info-content .title:hover {
     background: var(--accent-25);
     border-radius: 4px;
     box-shadow: 0 0 10px var(--accent-color);
+  } */
+
+  .info-content .title:hover {
+    box-shadow: var(--shadow-1),
+              0 0 10px var(--accent-color),
+              0 0 20px var(--accent-25);
   }
 
   .info_more-btn {
