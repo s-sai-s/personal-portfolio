@@ -247,8 +247,23 @@ article {
   --ionicon-stroke-width: 35px;
 }
 
-.social-icons{
+/* .social-icons{
   color: var(--accent-color);
+} */
+
+.social-icons {
+  transition: color 0.3s ease;
+}
+
+/* .social-icons:hover {
+  color: var(--accent-color);
+} */
+
+.social-icons:hover {
+  color: var(--accent-color);
+  text-shadow: 0 0 10px var(--accent-color),
+               0 0 20px var(--accent-25);
+  transform: scale(1.1); /* Optional: adds a slight grow effect */
 }
 
 article {
