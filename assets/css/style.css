@@ -10,7 +10,7 @@
   /**
    * colors
    */
-
+  
   /* base accent color */
   /* --accent-color: hsl(45, 100%, 72%);
   --accent-dark: hsl(45, 54%, 58%); */
@@ -245,6 +245,10 @@ article {
 
 .icon-box ion-icon {
   --ionicon-stroke-width: 35px;
+}
+
+.social-icons{
+  color: var(--accent-color);
 }
 
 article {
