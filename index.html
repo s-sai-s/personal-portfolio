@@ -17,6 +17,10 @@
   -->
 	<link rel="stylesheet" href="./assets/css/style.css" />
 
+	<!-- Calendly widget -->
+	<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+	<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
 	<!--
     - google font link
   -->
@@ -135,10 +139,9 @@
 					</li>
 
 					<li class="contact-item">
-						<!-- simply change div to a and add href to calendly -->
-						<div class="icon-box">
+						<a class="icon-box" style="cursor: pointer;" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/saisrinivas/quick-catchup?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=1aa7ff'});return false;">
 							<ion-icon name="calendar-outline"></ion-icon>
-						</div>
+						</a>
 
 						<div class="contact-info">
 							<p class="contact-title">Block my calendar</p>

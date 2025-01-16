@@ -2140,3 +2140,34 @@ textarea.form-input::-webkit-resizer {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Calendly custom styling */
+.calendly-overlay {
+  background-color: rgba(18, 18, 18, 0.8) !important;
+  backdrop-filter: blur(10px);
+}
+
+.calendly-popup {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.calendly-popup .calendly-close-overlay {
+  color: #ffffff !important;
+}
+
+/* Target the iframe wrapper */
+.calendly-popup .calendly-popup-content {
+  background: transparent !important;
+}
+
+/* Target the iframe itself */
+.calendly-popup-content iframe {
+  background: transparent !important;
+}
+
+/* Target any potential wrapper elements */
+.calendly-popup .calendly-popup-content > div,
+.calendly-popup .calendly-popup-content > div > div {
+  background-color: transparent !important;
+}
