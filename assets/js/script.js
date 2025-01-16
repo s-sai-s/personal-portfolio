@@ -137,3 +137,23 @@ for (let i = 0; i < navigationLinks.length; i++) {
     }
   });
 }
+
+function navigateToContact() {
+    // Find the "Contact" navigation link
+    const contactNav = Array.from(navigationLinks).find(link => 
+        link.innerHTML.toLowerCase() === 'contact'
+    );
+    
+    // Simulate click on the contact navigation
+    if (contactNav) {
+        contactNav.click();
+        
+        // Wait for page transition to complete then scroll to form
+        setTimeout(() => {
+            const contactForm = document.querySelector('.contact-form');
+            if (contactForm) {
+                contactForm.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 300); // 300ms delay to account for page transition
+    }
+}
