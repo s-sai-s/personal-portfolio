@@ -157,3 +157,101 @@ function navigateToContact() {
         }, 300); // 300ms delay to account for page transition
     }
 }
+
+// Chatbot functionality
+document.addEventListener('DOMContentLoaded', () => {
+  const chatbotIcon = document.getElementById('chatbot-icon');
+  const chatbotContainer = document.getElementById('chatbot-container');
+  const chatbotClose = document.getElementById('chatbot-close');
+  const chatbotInput = document.getElementById('chatbot-input');
+  const chatbotSend = document.getElementById('chatbot-send');
+  const chatbotMessages = document.getElementById('chatbot-messages');
+
+  // Function to get icon position
+  function getIconPosition() {
+    const iconRect = chatbotIcon.getBoundingClientRect();
+    return {
+      right: window.innerWidth - iconRect.right,
+      bottom: window.innerHeight - iconRect.bottom
+    };
+  }
+
+  // Update CSS variables with icon position
+  function updateIconPosition() {
+    const pos = getIconPosition();
+    document.documentElement.style.setProperty('--icon-right', `${pos.right}px`);
+    document.documentElement.style.setProperty('--icon-bottom', `${pos.bottom}px`);
+  }
+
+  // Update position on resize
+  window.addEventListener('resize', updateIconPosition);
+  updateIconPosition(); // Initial position
+
+  // Toggle chatbot with animation
+  chatbotIcon.addEventListener('click', () => {
+    updateIconPosition(); // Update position before animation
+    if (chatbotContainer.classList.contains('active')) {
+      chatbotContainer.classList.add('closing');
+      setTimeout(() => {
+        chatbotContainer.classList.remove('active', 'closing');
+      }, 300);
+    } else {
+      chatbotContainer.classList.add('active');
+    }
+  });
+
+  chatbotClose.addEventListener('click', () => {
+    updateIconPosition(); // Update position before animation
+    chatbotContainer.classList.add('closing');
+    setTimeout(() => {
+      chatbotContainer.classList.remove('active', 'closing');
+    }, 300);
+  });
+
+  // Auto-resize input
+  chatbotInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+
+  // Send message
+  function sendMessage() {
+    const message = chatbotInput.value.trim();
+    if (!message) return;
+
+    // Add user message
+    addMessage(message, 'user');
+    chatbotInput.value = '';
+    chatbotInput.style.height = 'auto';
+
+    // TODO: Replace with actual API call
+    setTimeout(() => {
+      addMessage("I'm a demo response. API integration coming soon!", 'bot');
+    }, 1000);
+  }
+
+  function addMessage(content, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    messageDiv.innerHTML = `
+      <div class="message-content">${content}</div>
+      <div class="message-timestamp">${timestamp}</div>
+    `;
+    
+    chatbotMessages.appendChild(messageDiv);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+
+  // Send on enter (shift+enter for new line)
+  chatbotInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  chatbotSend.addEventListener('click', sendMessage);
+});

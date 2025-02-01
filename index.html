@@ -481,11 +481,11 @@
 							<div data-modal-text>
 								<p>
 									Richard was hired to create a corporate identity. We were
-									very pleased with the work done. She has a lot of experience
-									and is very concerned about the needs of client. Lorem ipsum
-									dolor sit amet, ullamcous cididt consectetur adipiscing
-									elit, seds do et eiusmod tempor incididunt ut laborels
-									dolore magnarels alia.
+									very pleased with the work done. She has a lot of
+									experience and is very concerned about the needs of
+									client. Lorem ipsum dolor sit amet, ullamcous cididt
+									consectetur adipiscing elit, seds do et eiusmod tempor
+									incididunt ut laborels dolore magnarels alia.
 								</p>
 							</div>
 						</div>
@@ -1310,6 +1310,44 @@
   -->
 	<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 	<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+	<!-- Chatbot -->
+	<div class="chatbot-icon" id="chatbot-icon">
+		<div class="icon-box">
+			<ion-icon name="chatbubbles-outline"></ion-icon>
+		</div>
+	</div>
+
+	<div class="chatbot-container" id="chatbot-container">
+		<div class="chatbot-header">
+			<div class="chatbot-header-icon">
+				<div class="icon-box">
+					<ion-icon name="logo-wechat"></ion-icon>
+				</div>
+			</div>
+			<h3 class="h3" style="text-transform: none;">sAI Assistant</h3>
+			<button class="chatbot-close" id="chatbot-close">
+				<ion-icon name="close-outline"></ion-icon>
+			</button>
+		</div>
+		
+		<div class="chatbot-messages" id="chatbot-messages">
+			<!-- <div class="message bot-message">
+				<div class="message-content">Hi! How can I help you today?</div>
+				<div class="message-timestamp">Just now</div>
+			</div> -->
+			<!-- Removed initial message -->
+		</div>
+		
+		<div class="chatbot-input-container">
+			<textarea class="form-input chatbot-input" placeholder="Type your message..." rows="1" id="chatbot-input"></textarea>
+			<button class="chatbot-send" id="chatbot-send">
+				<div class="icon-box">
+					<ion-icon name="send-outline"></ion-icon>
+				</div>
+			</button>
+		</div>
+	</div>
 </body>
 
 </html>
