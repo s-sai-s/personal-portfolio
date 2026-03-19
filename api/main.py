@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -16,11 +18,20 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://www.saisrinivas.com", "https://saisrinivas.com", "http://localhost:3000"],
+    allow_origins=["https://www.saisrinivas.com", "https://saisrinivas.com", "http://localhost:3000", "http://localhost:8000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Serve static files (for Railway)
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
+
+
+@app.get("/")
+async def serve_index():
+    return FileResponse("index.html")
+
 
 # Constants
 SESSION_EXPIRY = 7200       # 2 hours in seconds
