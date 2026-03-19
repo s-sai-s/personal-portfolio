@@ -857,7 +857,19 @@
 					</ol>
 				  </section>
 
-				<!-- <section class="skill">
+				<section class="skill">
+				<div class="title-wrapper">
+				  <div class="icon-box">
+					<ion-icon name="code-slash-outline"></ion-icon>
+				  </div>
+				  <h3 class="h3">Skills</h3>
+				</div>
+				<div class="skills-cloud-wrapper content-card">
+				  <canvas id="skills-wordcloud"></canvas>
+				</div>
+			</section>
+
+			<!-- <section class="skill">
 					<h3 class="h3 skills-title">My skills</h3>
 
 					<ul class="skills-list content-card">
@@ -1379,6 +1391,96 @@
     - custom js link
   -->
 	<script src="./assets/js/script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
+	<script>
+	  (function () {
+	    var wordCloudRendered = false;
+
+	    var skills = [
+	      ['Gen AI',            18],
+		  ['Agentic AI',        17],
+		  ['RAG',               17],
+          ['LLMs',              17],
+		  ['Python',            16],
+	      ['LangChain',         15],
+	      ['LangGraph',         15],
+	      ['Scikit-learn',      14],
+	      ['FastAPI',           13],
+	      ['SQL',               11],
+	      ['PyTorch',           10],
+	      ['TensorFlow',        10],
+	      ['BERT',              10],
+	      ['Node2Vec',          10],
+	      ['MLflow',            10],
+	      ['NumPy',              8],
+	      ['Pandas',             8],
+	      ['Local LLMs',         8],
+	      ['Docker',             7],
+	      ['Flask',              7],
+	      ['GCN',                7],
+	      ['GAT',                7],
+	      ['spaCy',              7],
+	      ['PyTorch Geometric',  7],
+	      ['PostgreSQL',         6],
+	      ['MongoDB',            6],
+	      ['AWS S3',             6],
+	      ['Azure',              6],
+	      ['Keras',              5],
+	      ['Seaborn',            5],
+	      ['Plotly',             5],
+	      ['NoSQL',              5],
+	      ['Cypher',             5],
+	      ['HTML',               4],
+	      ['CSS',                4],
+	      ['CircleCI',           4],
+	      ['MySQL',              4],
+	      ['Streamlit',          4],
+	      ['RDKit',              4],
+	      ['DeepChem',           4],
+	      ['Uvicorn',            4],
+	    ];
+
+	    function renderWordCloud() {
+	      var canvas = document.getElementById('skills-wordcloud');
+	      if (!canvas || canvas.offsetWidth === 0) return;
+	      if (wordCloudRendered) return;
+
+	      canvas.width  = canvas.offsetWidth;
+	      canvas.height = canvas.offsetHeight;
+	      wordCloudRendered = true;
+
+	      WordCloud(canvas, {
+	        list:            skills,
+	        gridSize:        4,
+	        weightFactor:    function (size) { return Math.pow(size, 1.2) * (canvas.width / 280); },
+	        fontFamily:      'Poppins, sans-serif',
+	        color:           function (word, weight) {
+	          var t = (weight - 4) / (18 - 4);
+	          return 'hsl(200, 100%, ' + Math.round(35 + t * 30) + '%)';
+	        },
+	        rotateRatio:     0.3,
+	        minRotation:     Math.PI / 2,
+	        maxRotation:     Math.PI / 2,
+	        backgroundColor: 'transparent',
+	        shrinkToFit:     true,
+	        drawOutOfBound:  false,
+	        minSize:         6,
+	      });
+	    }
+
+	    document.addEventListener('DOMContentLoaded', function () {
+	      // Trigger on resume nav click
+	      var navLinks = document.querySelectorAll('[data-nav-link]');
+	      navLinks.forEach(function (link) {
+	        link.addEventListener('click', function () {
+	          if (this.innerHTML.trim().toLowerCase() === 'resume') {
+	            setTimeout(renderWordCloud, 50);
+	          }
+	        });
+	      });
+	    });
+	  })();
+	</script>
 
 	<!--
     - ionicon link
