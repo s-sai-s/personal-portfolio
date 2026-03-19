@@ -109,7 +109,6 @@ const formBtn = document.querySelector("[data-form-btn]");
 // add event to all form input field
 for (let i = 0; i < formInputs.length; i++) {
   formInputs[i].addEventListener("input", function () {
-    // check form validation
     if (form.checkValidity()) {
       formBtn.removeAttribute("disabled");
     } else {
@@ -117,6 +116,46 @@ for (let i = 0; i < formInputs.length; i++) {
     }
   });
 }
+
+// AJAX form submission to Formspree
+form.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const statusEl = document.getElementById("form-status");
+  const emailField = document.getElementById("email-field");
+
+  formBtn.setAttribute("disabled", "");
+  formBtn.querySelector("span").textContent = "Sending...";
+  statusEl.textContent = "";
+  statusEl.className = "form-status";
+
+  try {
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: new FormData(form),
+      headers: { Accept: "application/json" },
+    });
+
+    if (response.ok) {
+      statusEl.textContent = "Message sent! I'll get back to you soon.";
+      statusEl.classList.add("form-status--success");
+      form.reset();
+      formBtn.setAttribute("disabled", "");
+    } else {
+      const data = await response.json();
+      const msg = data.errors ? data.errors.map(e => e.message).join(", ") : "Something went wrong. Please try again.";
+      statusEl.textContent = msg;
+      statusEl.classList.add("form-status--error");
+      formBtn.removeAttribute("disabled");
+    }
+  } catch {
+    statusEl.textContent = "Network error. Please check your connection and try again.";
+    statusEl.classList.add("form-status--error");
+    formBtn.removeAttribute("disabled");
+  }
+
+  formBtn.querySelector("span").textContent = "Send Message";
+});
 
 // page navigation variables
 const navigationLinks = document.querySelectorAll("[data-nav-link]");

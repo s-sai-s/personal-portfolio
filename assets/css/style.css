@@ -1409,6 +1409,21 @@ textarea.form-input::-webkit-resizer {
   background: var(--bg-gradient-jet);
 }
 
+.form-status {
+  margin-top: 12px;
+  font-size: var(--fs-7);
+  text-align: center;
+  min-height: 20px;
+}
+
+.form-status--success {
+  color: hsl(145, 60%, 55%);
+}
+
+.form-status--error {
+  color: var(--bittersweet-shimmer);
+}
+
 /*-----------------------------------*\
   #RESPONSIVE
 \*-----------------------------------*/
