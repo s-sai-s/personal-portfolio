@@ -525,6 +525,30 @@ main {
   font-size: 18px;
 }
 
+.devto-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  background-color: var(--light-gray-70);
+  -webkit-mask-image: url('../images/icon-devto.svg');
+  mask-image: url('../images/icon-devto.svg');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  transition: background-color 0.3s ease;
+}
+
+.social-link:has(.devto-icon) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-link:hover .devto-icon {
+  background-color: var(--accent-color);
+}
+
 .social-item .social-link:hover {
   color: var(--light-gray);
 }
