@@ -159,6 +159,10 @@ function navigateToContact() {
 }
 
 // Chatbot functionality
+const API_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:8000'
+  : '';
+
 document.addEventListener('DOMContentLoaded', () => {
   const chatbotIcon = document.getElementById('chatbot-icon');
   const chatbotContainer = document.getElementById('chatbot-container');
@@ -167,55 +171,88 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatbotSend = document.getElementById('chatbot-send');
   const chatbotMessages = document.getElementById('chatbot-messages');
 
-  // Function to get icon position
-  function getIconPosition() {
-    const iconRect = chatbotIcon.getBoundingClientRect();
-    return {
-      right: window.innerWidth - iconRect.right,
-      bottom: window.innerHeight - iconRect.bottom
-    };
-  }
-
-  // Update CSS variables with icon position
-  function updateIconPosition() {
-    const pos = getIconPosition();
-    document.documentElement.style.setProperty('--icon-right', `${pos.right}px`);
-    document.documentElement.style.setProperty('--icon-bottom', `${pos.bottom}px`);
-  }
-
-  // Update position on resize
-  window.addEventListener('resize', updateIconPosition);
-  updateIconPosition(); // Initial position
-
-  // Toggle chatbot with animation
-  chatbotIcon.addEventListener('click', () => {
-    updateIconPosition(); // Update position before animation
-    if (chatbotContainer.classList.contains('active')) {
-      chatbotContainer.classList.add('closing');
-      setTimeout(() => {
-        chatbotContainer.classList.remove('active', 'closing');
-      }, 300);
-    } else {
-      chatbotContainer.classList.add('active');
+  // Generate or retrieve session ID
+  function getSessionId() {
+    let sessionId = localStorage.getItem('chatSessionId');
+    if (!sessionId) {
+      sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('chatSessionId', sessionId);
     }
-  });
+    return sessionId;
+  }
 
-  chatbotClose.addEventListener('click', () => {
-    updateIconPosition(); // Update position before animation
-    chatbotContainer.classList.add('closing');
-    setTimeout(() => {
-      chatbotContainer.classList.remove('active', 'closing');
-    }, 300);
-  });
+  // Store messages in localStorage
+  function storeLocalMessages(messages) {
+    localStorage.setItem(`chatMessages_${getSessionId()}`, JSON.stringify(messages));
+  }
 
-  // Auto-resize input
-  chatbotInput.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-  });
+  // Get messages from localStorage
+  function getLocalMessages() {
+    const messages = localStorage.getItem(`chatMessages_${getSessionId()}`);
+    return messages ? JSON.parse(messages) : [];
+  }
 
-  // Send message
-  function sendMessage() {
+  // Load chat history from backend and merge with local storage
+  async function loadChatHistory() {
+    const sessionId = getSessionId();
+
+    // First, display messages from localStorage immediately
+    const localMessages = getLocalMessages();
+    displayMessages(localMessages);
+
+    try {
+      const response = await fetch(`${API_URL}/api/chat/history/${sessionId}`);
+      if (!response.ok) throw new Error('Failed to load chat history');
+      
+      const data = await response.json();
+      
+      // Update localStorage with backend data
+      storeLocalMessages(data.history);
+      
+      // Display messages from backend
+      displayMessages(data.history);
+      
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+    }
+  }
+
+  // Display messages in the chat
+  function displayMessages(messages) {
+    chatbotMessages.innerHTML = ''; // Clear existing messages
+    messages.forEach(msg => {
+      addMessage(msg.content, msg.role, msg.timestamp);
+    });
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+
+  // Add message to chat
+  function addMessage(content, sender, timestamp = null) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    
+    const messageTime = timestamp ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                                : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    messageDiv.innerHTML = `
+      <div class="message-content">${content}</div>
+      <div class="message-timestamp">${messageTime}</div>
+    `;
+    
+    chatbotMessages.appendChild(messageDiv);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+    // Update local storage
+    const messages = getLocalMessages();
+    messages.push({
+      role: sender,
+      content: content,
+      timestamp: timestamp || new Date().toISOString()
+    });
+    storeLocalMessages(messages);
+  }
+
+  async function sendMessage() {
     const message = chatbotInput.value.trim();
     if (!message) return;
 
@@ -224,26 +261,70 @@ document.addEventListener('DOMContentLoaded', () => {
     chatbotInput.value = '';
     chatbotInput.style.height = 'auto';
 
-    // TODO: Replace with actual API call
-    setTimeout(() => {
-      addMessage("I'm a demo response. API integration coming soon!", 'bot');
-    }, 1000);
+    // Show typing indicator
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'message bot-message typing';
+    typingIndicator.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+    chatbotMessages.appendChild(typingIndicator);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+    try {
+      const response = await fetch(`${API_URL}/api/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: message,
+          session_id: getSessionId()
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+
+      const data = await response.json();
+      
+      // Remove typing indicator
+      typingIndicator.remove();
+
+      // Add bot response to chat
+      addMessage(data.response, 'bot');
+
+    } catch (error) {
+      console.error('Error:', error);
+      
+      // Remove typing indicator
+      typingIndicator.remove();
+
+      // Show error message
+      addMessage("I'm sorry, I couldn't process your request at the moment. Please try again later.", 'bot');
+    }
   }
 
-  function addMessage(content, sender) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}-message`;
+  // Load chat history when page loads
+  loadChatHistory();
+
+  // Toggle chatbot
+  chatbotIcon.addEventListener('click', () => {
+    chatbotContainer.classList.toggle('active');
     
-    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
-    messageDiv.innerHTML = `
-      <div class="message-content">${content}</div>
-      <div class="message-timestamp">${timestamp}</div>
-    `;
-    
-    chatbotMessages.appendChild(messageDiv);
-    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-  }
+    // Reload chat history when opening chatbot
+    if (chatbotContainer.classList.contains('active')) {
+      loadChatHistory();
+    }
+  });
+
+  chatbotClose.addEventListener('click', () => {
+    chatbotContainer.classList.remove('active');
+  });
+
+  // Auto-resize input
+  chatbotInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
 
   // Send on enter (shift+enter for new line)
   chatbotInput.addEventListener('keydown', (e) => {
@@ -255,3 +336,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   chatbotSend.addEventListener('click', sendMessage);
 });
+
+// Add typing indicator CSS
+const typingIndicatorCSS = `
+.typing-dots {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+}
+
+.typing-dots span {
+  width: 8px;
+  height: 8px;
+  background: var(--light-gray);
+  border-radius: 50%;
+  animation: typing 1s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+}
+`;
+
+// Add the CSS to the document
+const style = document.createElement('style');
+style.textContent = typingIndicatorCSS;
+document.head.appendChild(style);

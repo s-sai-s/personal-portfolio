@@ -2318,6 +2318,7 @@ textarea.form-input::-webkit-resizer {
 @keyframes expandFromIcon {
   from {
     opacity: 0;
+    /* transform: translate(370px, 400px) scale(0.1); */
     transform: translate(var(--icon-right), var(--icon-bottom)) scale(0.1);
   }
   to {
@@ -2334,45 +2335,16 @@ textarea.form-input::-webkit-resizer {
   }
   to {
     opacity: 0;
+    /* transform: translate(370px, 400px) scale(0.1); */
     transform: translate(var(--icon-right), var(--icon-bottom)) scale(0.1);
   }
 }
 
-.chatbot-container {
-  position: fixed;
-  bottom: 100px;
-  right: 30px;
-  width: 400px;
-  height: 500px;
-  background: var(--eerie-black-2);
-  border: 1px solid var(--jet);
-  border-radius: 20px;
-  box-shadow: var(--shadow-5);
-  display: none;
-  flex-direction: column;
-  z-index: 1000;
-  transform-origin: bottom right;
+/* Add a subtle hover effect to the chatbot icon */
+.chatbot-icon .icon-box {
+  transition: transform 0.3s ease;
 }
 
-.chatbot-container.active {
-  display: flex;
-  animation: expandFromIcon 0.3s ease-out forwards;
-}
-
-.chatbot-container.closing {
-  animation: collapseToIcon 0.3s ease-in forwards;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .chatbot-container {
-    width: 90%;
-    height: 60vh;
-    right: 5%;
-    bottom: 80px;
-  }
-  
-  .chatbot-icon {
-    bottom: 80px;
-  }
+.chatbot-icon:hover .icon-box {
+  transform: scale(1.1);
 }
