@@ -230,12 +230,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function addMessage(content, sender, timestamp = null) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${sender}-message`;
-    
+
     const messageTime = timestamp ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                                 : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
+
+    const renderedContent = content.replace(
+      /\[contact form\]/gi,
+      '<a href="javascript:void(0)" onclick="navigateToContact()" style="text-decoration:underline;cursor:pointer;">contact form</a>'
+    );
+
     messageDiv.innerHTML = `
-      <div class="message-content">${content}</div>
+      <div class="message-content">${renderedContent}</div>
       <div class="message-timestamp">${messageTime}</div>
     `;
     
